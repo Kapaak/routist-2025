@@ -1,9 +1,9 @@
 import { PropsWithChildren } from "react";
 
-// import { Header } from "@/components/Header";
-// import { Footer } from "@/components/Footer";
 import { Karla } from "next/font/google";
+
 import { Header } from "../Header";
+import { Footer } from "../Footer";
 
 const karla = Karla({ subsets: ["latin", "latin-ext"] });
 
@@ -12,7 +12,7 @@ export const MainLayout = ({ children }: PropsWithChildren) => {
     <>
       <Header />
       <main className={karla.className}>{children}</main>
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 };
