@@ -1,15 +1,15 @@
-import { Region } from "~/domains";
+import { DistrictRoutesCount } from "~/domains";
 import { MainHeadline, MaxWidth } from "~/ui/components/atoms";
 
 import { LocationCard } from "./components";
 import { districts } from "~/ui/constants/location";
 
 interface LocationsPageScreenProps {
-  regionsRoutesCount: Region;
+  districtRoutesCount: DistrictRoutesCount;
 }
 
 export const LocationsPageScreen = ({
-  regionsRoutesCount,
+  districtRoutesCount,
 }: LocationsPageScreenProps) => {
   return (
     <section>
@@ -22,7 +22,7 @@ export const LocationsPageScreen = ({
               return (
                 <LocationCard
                   key={location.value}
-                  routesCount={regionsRoutesCount[region] ?? 0}
+                  routesCount={districtRoutesCount[region] ?? 0}
                   label={location.label}
                   href={`/locations/${location.value}`}
                 />

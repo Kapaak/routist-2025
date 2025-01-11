@@ -1,5 +1,7 @@
 import { HTMLAttributes } from "react";
 
+import { Route as PrismaRoute } from "@prisma/client";
+
 export type ClassName = HTMLAttributes<HTMLDivElement>["className"];
 
 export type AutocompleteOption = {
@@ -8,4 +10,10 @@ export type AutocompleteOption = {
   value: string;
 };
 
-export type Region = { [region: string]: number };
+export type DistrictRoutesCount = { [district: string]: number };
+
+export type GeneratedRoute = PrismaRoute;
+
+export type RoutesPerLocationResponse = {
+  detail: { regions: string[] };
+};
