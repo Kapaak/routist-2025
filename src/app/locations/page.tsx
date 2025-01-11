@@ -1,4 +1,4 @@
-import { getAllDistrictRoutesCount } from "prisma/api/route";
+import { getAllDistrictRoutesCount } from "~/prisma/api/route";
 import { LocationsPageScreen } from "~/screens/LocationsPage";
 
 export default async function LocationsPage() {

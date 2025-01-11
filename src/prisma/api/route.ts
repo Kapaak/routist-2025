@@ -29,7 +29,7 @@ export const getAllDistrictRoutesCount = async () => {
   return districtRoutesCount;
 };
 
-export const getAllRoutesByLocation = async (location: string) => {
+export const getAllRoutesByDistrict = async (district: string) => {
   const routes = await prisma.route.findMany({
     include: {
       author: true,
@@ -37,7 +37,7 @@ export const getAllRoutesByLocation = async (location: string) => {
   });
 
   const filtered = routes.filter((route) =>
-    route.detail.regions.includes(location)
+    route.detail.regions.includes(district)
   );
 
   return filtered;
