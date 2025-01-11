@@ -8,6 +8,8 @@ import { List } from "@phosphor-icons/react/dist/ssr";
 
 // import { useRouter } from "next/navigation";
 import { MobileMenu } from "./MobileMenu";
+import { navigationItems } from "~/ui/constants/navigation";
+
 export const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -19,17 +21,24 @@ export const Navigation = () => {
   }, []);
 
   return (
-    <nav className="">
+    <nav>
       <ul className="hidden items-center gap-8 lg:flex">
-        <Link variant="underlined" href="/" onClick={handleClose}>
-          domů
-        </Link>
-        <Link variant="underlined" href="/locations" onClick={handleClose}>
-          kraje
-        </Link>
-        {/* <Link variant="underlined" href="/contact" onClick={handleClose}>
-          kontakt
-        </Link> */}
+        {navigationItems.map(
+          (item) =>
+            item.show && (
+              <li key={item.href}>
+                <Link
+                  variant="underlined"
+                  className="lowercase"
+                  href={item.href}
+                  onClick={handleClose}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            )
+        )}
+
         {/* {!session && (
           <Button onClick={() => router.push("/sign-in")}>Přihlásit se</Button>
         )}
