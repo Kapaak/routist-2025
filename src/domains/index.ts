@@ -12,7 +12,8 @@ export type AutocompleteOption = {
 
 export type DistrictRoutesCount = { [district: string]: number };
 
-export type GeneratedRoute = PrismaRoute;
+//TODO: generate new type for this -> author should be directly in PrismaRoute
+export type GeneratedRoute = PrismaRoute & { author: { name?: string | null } };
 
 export type GeneratedRouteWithAuthor = Prisma.RouteGetPayload<{
   include: { author: true };
