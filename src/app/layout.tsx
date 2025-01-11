@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import "../ui/theme/style-reset.css";
 import "../ui/theme/base.css";
-import { MainLayout } from "~/ui/components/layouts";
+import { MainLayout } from "~/components/Layout";
 
 export const metadata: Metadata = {
   title: "Create Next App",
