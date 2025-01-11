@@ -2,19 +2,20 @@
 
 import { useCallback, useState } from "react";
 
-import { IconButton, Link } from "~/ui/components/atoms";
+import { Button, IconButton, Link } from "~/ui/components/atoms";
 import { List } from "@phosphor-icons/react/dist/ssr";
-// import { useSession } from "next-auth/react";
 
-// import { useRouter } from "next/navigation";
 import { MobileMenu } from "./MobileMenu";
 import { navigationItems } from "~/ui/constants/navigation";
+import { useSession } from "next-auth/react";
+import { UserComponent } from "~/components/User/User";
+import { useRouter } from "next/navigation";
 
 export const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  // const { data: session } = useSession();
-  // const router = useRouter();
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
   const handleClose = useCallback(() => {
     setIsOpen(false);
@@ -39,12 +40,12 @@ export const Navigation = () => {
             )
         )}
 
-        {/* {!session && (
+        {!session && (
           <Button onClick={() => router.push("/sign-in")}>Přihlásit se</Button>
         )}
         {session && session?.user?.name && (
           <UserComponent userName={session?.user?.name} />
-        )} */}
+        )}
       </ul>
 
       <IconButton
