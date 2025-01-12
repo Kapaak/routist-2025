@@ -49,18 +49,16 @@ export const SignInPageScreen = () => {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <div className="flex gap-2">
-                    <TextLink
-                      text="Ještě nemáš účet"
-                      action="Registruj se"
-                      href="/sign-up"
-                    />
-                    <TextLink
-                      text="Zapomněli jste heslo?"
-                      action="Nové heslo"
-                      href="/new-password"
-                    />
-                  </div>
+                  <TextLink
+                    text="Ještě nemáš účet"
+                    action="Registruj se"
+                    href="/sign-up"
+                  />
+                  <TextLink
+                    text="Zapomněli jste heslo?"
+                    action="Nové heslo"
+                    href="/new-password"
+                  />
                 </div>
 
                 <Button color="secondary" className="self-end">
