@@ -9,6 +9,37 @@ const authOptions: AuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
     }),
   ],
+  session: {
+    strategy: "jwt",
+  },
+  callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+      return true;
+    },
+    async session({ session, token, user }) {
+      // const email = token.email as string;
+      // const name = token.name as string;
+
+      // const userInDB = await getUserByEmail(email);
+
+      // if (!userInDB) {
+      //   const newUser = await createUser(email, name);
+      //   session.user.id = newUser.id;
+
+      //   return session;
+      // }
+
+      // session.user.id = userInDB.id;
+
+      return session;
+    },
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: "/sign-in",
+    signOut: "/sign-out",
+  },
+  debug: process.env.NODE_ENV === "development",
 };
 
 /**

@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { Fragment } from "react";
 
 import {
@@ -21,7 +21,7 @@ const links = [
 ];
 
 // TODO: REFACTOR !!
-export const UserComponent = ({ userName }: UserProps) => {
+export const User = ({ userName }: UserProps) => {
   const router = useRouter();
 
   return (

@@ -5,7 +5,7 @@ import "../ui/theme/base.css";
 import { MainLayout } from "~/components/Layout";
 import { PropsWithChildren } from "react";
 import { AuthProvider } from "~/components/AuthProvider";
-import { getSession } from "next-auth/react";
+import { getSession } from "~/auth";
 
 export const metadata: Metadata = {
   title: "Create Next App",
