@@ -6,6 +6,7 @@
 import { getRouteById } from "~/prisma/api/route";
 import { notFound } from "next/navigation";
 import { RoutePageScreen } from "~/screens/RouteDetailPage";
+import { getSession } from "~/auth";
 
 // import { authOptions } from "../../../../pages/api/auth/[...nextauth]";
 
@@ -17,11 +18,15 @@ interface NextPageProps {
 export default async function RoutePage({ params }: NextPageProps) {
   const { routeId, locationId } = params;
 
-  const route = await getRouteById(routeId as string);
+  const route = await getRouteById(routeId);
 
   if (!route) {
     return notFound();
   }
+
+  const session = await getSession();
+
+  const isAuthor = session?.user.id === route?.authorId;
 
   return (
     // <RouteContextProvider>
@@ -29,7 +34,7 @@ export default async function RoutePage({ params }: NextPageProps) {
       routeId={routeId}
       locationId={locationId}
       route={route}
-      isAuthor={true}
+      isAuthor={isAuthor}
     />
     //  </RouteContextProvider>
   );

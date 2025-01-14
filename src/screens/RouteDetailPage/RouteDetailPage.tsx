@@ -7,6 +7,7 @@ import {
   RouteDetailCard,
   RouteTitleDescription,
 } from "./components";
+import { Mapbox } from "~/components/Mapbox";
 // import { LeafletMap } from "@/components/Map/LeafletMap";
 // import { MapContainer } from "@/components/Map";
 
@@ -52,6 +53,7 @@ export const RoutePageScreen = ({
         )}
       </div>
       <div className="relative h-[35rem] lg:h-full lg:flex-1 lg:p-4">
+        <Mapbox />
         {/* <MapContainer staticView /> */}
         {/* <MapContainer staticView={true} /> */}
       </div>

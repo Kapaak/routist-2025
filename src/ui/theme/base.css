@@ -18,6 +18,10 @@
     scroll-margin-top: 10rem;
   }
 
+  .mapboxgl-canvas{
+    height:100%
+  }
+
   p {
     font-weight: 400;
   }
