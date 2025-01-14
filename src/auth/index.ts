@@ -1,14 +1,24 @@
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-
 import { AuthOptions, getServerSession } from "next-auth";
-import { getUserByEmail } from "~/prisma/api/user";
+import { getUserByEmail, createUser } from "~/prisma/api/user";
 import { verifyPassword } from "~/utils/encryption";
 
 type Credentials = {
   email: string;
   password: string;
 };
+
+// Extend the Session type to include the id property
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      email: string;
+      name: string;
+    };
+  }
+}
 
 const authOptions: AuthOptions = {
   providers: [
@@ -45,19 +55,17 @@ const authOptions: AuthOptions = {
       return true;
     },
     async session({ session, token, user }) {
-      // const email = token.email as string;
-      // const name = token.name as string;
+      const email = token.email as string;
+      const name = token.name as string;
 
-      // const userInDB = await getUserByEmail(email);
+      const userInDB = await getUserByEmail(email);
 
-      // if (!userInDB) {
-      //   const newUser = await createUser(email, name);
-      //   session.user.id = newUser.id;
-
-      //   return session;
-      // }
-
-      // session.user.id = userInDB.id;
+      if (!userInDB) {
+        const newUser = await createUser(email, name);
+        session.user.id = newUser.id;
+      } else {
+        session.user.id = userInDB.id;
+      }
 
       return session;
     },
