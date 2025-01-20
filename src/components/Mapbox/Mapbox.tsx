@@ -31,29 +31,31 @@ export function Mapbox({ route }: MapboxProps) {
 
     if (!mapContainer.current) return;
 
-    map.current = new mapboxgl.Map({
+    const map = new mapboxgl.Map({
       container: mapContainer.current,
+      renderWorldCopies: false,
+      preserveDrawingBuffer: true,
       style: "mapbox://styles/kapaakinos/cljg8ydp100aw01qs1bpl3sn2",
       center: [16.6068, 49.1951],
       zoom: 13,
     });
 
-    map.current.on("load", () => {
-      map.current?.addControl(new mapboxgl.NavigationControl());
+    map.on("load", () => {
+      map.addControl(new mapboxgl.NavigationControl());
 
-      if (route && map.current) {
+      if (route && map) {
         const waypoints = route?.map((point) => {
           return [point.coordinates.lng, point.coordinates.lat];
         });
 
-        initializeRoutePoints(waypoints, map.current);
-        initializeRouteMarkers(waypoints, map.current);
+        initializeRoutePoints(waypoints, map);
+        initializeRouteMarkers(waypoints, map);
 
         //tady do budoucna nebudou vsechny waypoints
         //waypoints budou jen manualne pridany pruchozi pointy
         //tady budou vsechny vygenerovany pointy z routy
         const layer = initializeRoutePath(waypoints);
-        map.current?.addLayer(layer);
+        map?.addLayer(layer);
       }
     });
   }, [route]);
