@@ -53,7 +53,7 @@ export const RoutePageScreen = ({
         )}
       </div>
       <div className="relative h-[35rem] lg:h-full lg:flex-1 lg:p-4">
-        <Mapbox />
+        <Mapbox route={route?.routePoints} />
         {/* <MapContainer staticView /> */}
         {/* <MapContainer staticView={true} /> */}
       </div>

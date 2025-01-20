@@ -17,8 +17,7 @@ export type GeneratedRoute = PrismaRoute & { author: { name?: string | null } };
 
 export type GeneratedRouteWithAuthor = Prisma.RouteGetPayload<{
   include: { author: true };
-}> &
-  GeneratedRoute;
+}>;
 
 export type RoutesPerLocationResponse = {
   detail: { regions: string[] };
