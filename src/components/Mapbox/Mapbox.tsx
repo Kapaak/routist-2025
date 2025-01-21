@@ -1,9 +1,9 @@
 "use client";
 
-import mapboxgl, { LayerSpecification, LngLatLike } from "mapbox-gl";
+import mapboxgl, { LngLatLike } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-import { RefObject, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { GeneratedRoute } from "~/domains";
 import {
   initializeRouteMarkers,
@@ -19,15 +19,19 @@ interface MapboxProps {
 //1. pridat do route nejakej identifikator na manualni point pridaný uživatelem
 // - abych mohl zobrazit ty manualni pointy pomoci markeru a
 // - zaroven abych mohl zobrazit vsechny pointy z routy a nevolat API vzdy znova
+mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX;
+
+const DEFAULT_COORDINATES: LngLatLike = [16.6068, 49.1951];
 
 export function Mapbox({ route }: MapboxProps) {
   const mapContainer = useRef(null);
   const map = useRef<mapboxgl.Map>(null);
 
   useEffect(() => {
-    console.log(process.env.NEXT_PUBLIC_MAPBOX);
-
-    mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX;
+    const routeStartCoordinates: LngLatLike = [
+      route[0]?.coordinates.lng,
+      route[0]?.coordinates.lat,
+    ];
 
     if (!mapContainer.current) return;
 
@@ -36,8 +40,11 @@ export function Mapbox({ route }: MapboxProps) {
       renderWorldCopies: false,
       preserveDrawingBuffer: true,
       style: "mapbox://styles/kapaakinos/cljg8ydp100aw01qs1bpl3sn2",
-      center: [16.6068, 49.1951],
-      zoom: 13,
+      center: route[0]?.coordinates
+        ? routeStartCoordinates
+        : DEFAULT_COORDINATES,
+      zoom: 9,
+      minZoom: 6,
     });
 
     map.on("load", () => {
@@ -82,7 +89,6 @@ export function Mapbox({ route }: MapboxProps) {
     );
 
     const json = await query.json();
-    console.log("🚀 ~ test ~ json:", json);
 
     const data = json.routes[0];
     const routeCoordinates = data.geometry.coordinates;
