@@ -8,6 +8,7 @@ import {
   RouteTitleDescription,
 } from "./components";
 import { Mapbox } from "~/components/Mapbox";
+import { getRoutePointsByWaypoints } from "~/libs/mapbox/api/route";
 // import { LeafletMap } from "@/components/Map/LeafletMap";
 // import { MapContainer } from "@/components/Map";
 
@@ -18,12 +19,14 @@ interface RoutePageScreenProps {
   isAuthor: boolean;
 }
 
-export const RoutePageScreen = ({
+export async function RoutePageScreen({
   locationId,
   routeId,
   route,
   isAuthor,
-}: RoutePageScreenProps) => {
+}: RoutePageScreenProps) {
+  const data = await getRoutePointsByWaypoints(route?.routePoints);
+  console.log("🚀 ~ data:", data);
   return (
     <RouteDetailCard returnPath={`/locations/${locationId}`}>
       <div className="relative flex flex-col flex-1 gap-4 p-12 lg:flex">
@@ -53,10 +56,13 @@ export const RoutePageScreen = ({
         )}
       </div>
       <div className="relative h-[35rem] lg:h-full lg:flex-1 lg:p-4">
-        <Mapbox route={route?.routePoints} />
+        <Mapbox
+          routePoints={data?.geometry?.coordinates}
+          waypoints={route?.routePoints}
+        />
         {/* <MapContainer staticView /> */}
         {/* <MapContainer staticView={true} /> */}
       </div>
     </RouteDetailCard>
   );
-};
+}

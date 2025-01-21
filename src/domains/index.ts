@@ -41,3 +41,15 @@ export enum PlaceOfInterest {
   CULTURE = "culture",
   CHILDREN = "children",
 }
+
+export type GetRoutePointsResponse = {
+  distance: number;
+  duration: number;
+  geometry: {
+    coordinates: [number, number][];
+    type: string;
+    legs: unknown[];
+    weight: number;
+    weight_name: string;
+  };
+};

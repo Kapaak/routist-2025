@@ -7,10 +7,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "prisma:pull": "prisma db pull --schema=\"./src/prisma/schema.prisma\"",
-    "prisma:push": "prisma db push --schema=\"./src/prisma/schema.prisma\"",
-    "prisma:studio": "prisma studio --schema=\"./src/prisma/schema.prisma\"",
-    "prisma:generate": "prisma generate --schema=\"./src/prisma/schema.prisma\"",
+    "prisma:pull": "prisma db pull --schema=\"./src/libs/prisma/schema.prisma\"",
+    "prisma:push": "prisma db push --schema=\"./src/libs/prisma/schema.prisma\"",
+    "prisma:studio": "prisma studio --schema=\"./src/libs/prisma/schema.prisma\"",
+    "prisma:generate": "prisma generate --schema=\"./src/libs/prisma/schema.prisma\"",
     "lint": "next lint"
   },
   "dependencies": {

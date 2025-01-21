@@ -12,7 +12,8 @@ import {
 } from "~/utils/map";
 
 interface MapboxProps {
-  route: GeneratedRoute["routePoints"];
+  routePoints: LngLatLike[];
+  waypoints: GeneratedRoute["routePoints"];
 }
 
 //TODO:
@@ -23,14 +24,14 @@ mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX;
 
 const DEFAULT_COORDINATES: LngLatLike = [16.6068, 49.1951];
 
-export function Mapbox({ route }: MapboxProps) {
+export function Mapbox({ waypoints, routePoints }: MapboxProps) {
   const mapContainer = useRef(null);
   const map = useRef<mapboxgl.Map>(null);
 
   useEffect(() => {
     const routeStartCoordinates: LngLatLike = [
-      route[0]?.coordinates.lng,
-      route[0]?.coordinates.lat,
+      waypoints[0]?.coordinates.lng,
+      waypoints[0]?.coordinates.lat,
     ];
 
     if (!mapContainer.current) return;
@@ -40,7 +41,7 @@ export function Mapbox({ route }: MapboxProps) {
       renderWorldCopies: false,
       preserveDrawingBuffer: true,
       style: "mapbox://styles/kapaakinos/cljg8ydp100aw01qs1bpl3sn2",
-      center: route[0]?.coordinates
+      center: waypoints[0]?.coordinates
         ? routeStartCoordinates
         : DEFAULT_COORDINATES,
       zoom: 9,
@@ -50,56 +51,53 @@ export function Mapbox({ route }: MapboxProps) {
     map.on("load", () => {
       map.addControl(new mapboxgl.NavigationControl());
 
-      if (route && map) {
-        const waypoints = route?.map((point) => {
+      if (waypoints && map) {
+        const waypointsCoordinates = waypoints?.map((point) => {
           return [point.coordinates.lng, point.coordinates.lat];
         });
 
-        initializeRoutePoints(waypoints, map);
-        initializeRouteMarkers(waypoints, map);
+        initializeRoutePoints(waypointsCoordinates, map);
+        initializeRouteMarkers(waypointsCoordinates, map);
 
-        //tady do budoucna nebudou vsechny waypoints
-        //waypoints budou jen manualne pridany pruchozi pointy
-        //tady budou vsechny vygenerovany pointy z routy
-        const layer = initializeRoutePath(waypoints);
+        const layer = initializeRoutePath(routePoints);
         map?.addLayer(layer);
       }
     });
-  }, [route]);
+  }, [routePoints, waypoints]);
 
   const test = async () => {
-    if (!route || !map?.current) return;
+    // if (!route || !map?.current) return;
 
-    const coordinates = route.map((point) => {
-      return [point.coordinates.lng, point.coordinates.lat];
-    });
+    // const coordinates = route.map((point) => {
+    //   return [point.coordinates.lng, point.coordinates.lat];
+    // });
 
-    const coordinatesString = coordinates.reduce((acc, coord, index) => {
-      const coordString = `${coord[0]},${coord[1]}`;
-      if (index !== coordinates.length - 1) {
-        return acc + coordString + ";";
-      } else {
-        return acc + coordString;
-      }
-    }, "");
+    // const coordinatesString = coordinates.reduce((acc, coord, index) => {
+    //   const coordString = `${coord[0]},${coord[1]}`;
+    //   if (index !== coordinates.length - 1) {
+    //     return acc + coordString + ";";
+    //   } else {
+    //     return acc + coordString;
+    //   }
+    // }, "");
 
-    const query = await fetch(
-      `https://api.mapbox.com/directions/v5/mapbox/cycling/${coordinatesString}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`,
-      { method: "GET" }
-    );
+    // const query = await fetch(
+    //   `https://api.mapbox.com/directions/v5/mapbox/cycling/${coordinatesString}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`,
+    //   { method: "GET" }
+    // );
 
-    const json = await query.json();
+    // const json = await query.json();
 
-    const data = json.routes[0];
-    const routeCoordinates = data.geometry.coordinates;
-    const geojson = {
-      type: "Feature",
-      properties: {},
-      geometry: {
-        type: "LineString",
-        coordinates: routeCoordinates,
-      },
-    };
+    // const data = json.routes[0];
+    // const routeCoordinates = data.geometry.coordinates;
+    // const geojson = {
+    //   type: "Feature",
+    //   properties: {},
+    //   geometry: {
+    //     type: "LineString",
+    //     coordinates: routeCoordinates,
+    //   },
+    // };
 
     // if the route already exists on the map, we'll reset it using setData
     if (map.current.getSource("route")) {
@@ -112,7 +110,7 @@ export function Mapbox({ route }: MapboxProps) {
         type: "line",
         source: {
           type: "geojson",
-          data: geojson,
+          // data: geojson,
         },
         layout: {
           "line-join": "round",

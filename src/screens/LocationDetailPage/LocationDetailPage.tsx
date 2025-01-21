@@ -1,6 +1,6 @@
 import { MainHeadline, MainSubheadline, MaxWidth } from "~/ui/components/atoms";
 import { Suspense } from "react";
-import { getAllRoutesByDistrict } from "~/prisma/api/route";
+import { getAllRoutesByDistrict } from "~/libs/prisma/api/route";
 import { districts } from "~/ui/constants/location";
 import { RoutesTable } from "./components";
 

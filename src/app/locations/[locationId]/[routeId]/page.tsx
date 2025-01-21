@@ -3,7 +3,7 @@
 
 // import { RouteContextProvider } from "@/contexts";
 // import { GeneratedRoute } from "@/domains";
-import { getRouteById } from "~/prisma/api/route";
+import { getRouteById } from "~/libs/prisma/api/route";
 import { notFound } from "next/navigation";
 import { RoutePageScreen } from "~/screens/RouteDetailPage";
 import { getSession } from "~/auth";

@@ -39,7 +39,7 @@ export function initializeRouteMarkers(
  * @returns A Mapbox LayerSpecification object for the route path.
  */
 export function initializeRoutePath(
-  coordinates: number[][]
+  coordinates: number[][] | LngLatLike[]
 ): LayerSpecification {
   const geojson = {
     type: "Feature",

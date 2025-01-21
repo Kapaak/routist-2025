@@ -1,7 +1,7 @@
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { AuthOptions, getServerSession } from "next-auth";
-import { getUserByEmail, createUser } from "~/prisma/api/user";
+import { getUserByEmail, createUser } from "~/libs/prisma/api/user";
 import { verifyPassword } from "~/utils/encryption";
 
 type Credentials = {
