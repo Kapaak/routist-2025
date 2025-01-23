@@ -11,18 +11,21 @@ import { Coordinate } from "~/domains";
  *
  * @param coordinates - An array of coordinates for the markers.
  * @param map - The Mapbox map instance where the markers will be added.
+ * @param onChange - A function to call when a marker is dragged.
+ * @param editable - A boolean indicating whether the markers are draggable.
  * @returns An array of created markers.
  */
 export function updateRouteMarkers(
   coordinates: Coordinate[],
   map: mapboxgl.Map,
-  onChange: (newCoordinates: Coordinate[]) => void
+  onChange: (newCoordinates: Coordinate[]) => void,
+  editable = true
 ) {
   const markers = coordinates.map((coord, index) => {
     return new Marker()
       .setLngLat(coord as LngLatLike)
       .addTo(map)
-      .setDraggable(true)
+      .setDraggable(editable)
       .on("dragend", (e) => {
         const lngLat = e.target.getLngLat();
 

@@ -29,7 +29,6 @@ export async function RoutePageScreen({
   const data = await getRoutePointsByWaypoints(
     coordinatesFromRoutePoints(route?.routePoints)
   );
-  console.log("🚀 ~ data:", data);
   return (
     <RouteDetailCard returnPath={`/locations/${locationId}`}>
       <div className="relative flex flex-col flex-1 gap-4 p-12 lg:flex">
@@ -62,9 +61,8 @@ export async function RoutePageScreen({
         <Mapbox
           routePoints={data?.geometry?.coordinates}
           waypoints={route?.routePoints}
+          editable={false}
         />
-        {/* <MapContainer staticView /> */}
-        {/* <MapContainer staticView={true} /> */}
       </div>
     </RouteDetailCard>
   );

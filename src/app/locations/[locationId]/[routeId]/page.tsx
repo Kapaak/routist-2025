@@ -29,37 +29,11 @@ export default async function RoutePage({ params }: NextPageProps) {
   const isAuthor = session?.user.id === route?.authorId;
 
   return (
-    // <RouteContextProvider>
     <RoutePageScreen
       routeId={routeId}
       locationId={locationId}
       route={route}
       isAuthor={isAuthor}
     />
-    //  </RouteContextProvider>
   );
 }
-
-// export const getServerSideProps: GetServerSideProps<RoutePageProps> = async (
-//   ctx
-// ) => {
-//   const { routeId } = ctx.query;
-
-//   const route = await getRouteById(routeId as string);
-
-//   if (!route) return { notFound: true };
-
-//   const session = await getServerSession(ctx.req, ctx.res, authOptions);
-
-//   const isAuthor = session?.user.id === route?.authorId;
-
-//   //@ts-ignore Have to convert date to string so that I can pass it in props
-//   route.createdAt = JSON.stringify(route.createdAt);
-
-//   return {
-//     props: {
-//       route,
-//       isAuthor,
-//     },
-//   };
-// };

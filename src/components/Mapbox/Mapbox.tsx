@@ -16,13 +16,14 @@ import {
 interface MapboxProps {
   routePoints: Coordinate[];
   waypoints: GeneratedRoute["routePoints"];
+  editable?: boolean;
 }
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX;
 
 const DEFAULT_COORDINATES: LngLatLike = [16.6068, 49.1951];
 
-export function Mapbox({ waypoints, routePoints }: MapboxProps) {
+export function Mapbox({ waypoints, routePoints, editable }: MapboxProps) {
   const waypointsRef = useRef(waypoints);
   //Map container is for targeting the map HTML element
   const mapContainer = useRef(null);
@@ -81,13 +82,18 @@ export function Mapbox({ waypoints, routePoints }: MapboxProps) {
         });
 
         updateRoutePoints(waypointsCoordinates, map);
-        updateRouteMarkers(waypointsCoordinates, map, handleWaypointsChange);
+        updateRouteMarkers(
+          waypointsCoordinates,
+          map,
+          handleWaypointsChange,
+          editable
+        );
 
         const layer = updateRoutePath(routePoints);
         map?.addLayer(layer);
       }
     });
-  }, [handleWaypointsChange, routePoints, waypoints]);
+  }, [editable, handleWaypointsChange, routePoints, waypoints]);
 
   return (
     <div id="map" className="relative w-full h-full">
