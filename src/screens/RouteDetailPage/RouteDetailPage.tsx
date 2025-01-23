@@ -9,6 +9,7 @@ import {
 } from "./components";
 import { Mapbox } from "~/components/Mapbox";
 import { getRoutePointsByWaypoints } from "~/libs/mapbox/api/route";
+import { coordinatesFromRoutePoints } from "~/utils/route";
 // import { LeafletMap } from "@/components/Map/LeafletMap";
 // import { MapContainer } from "@/components/Map";
 
@@ -25,7 +26,9 @@ export async function RoutePageScreen({
   route,
   isAuthor,
 }: RoutePageScreenProps) {
-  const data = await getRoutePointsByWaypoints(route?.routePoints);
+  const data = await getRoutePointsByWaypoints(
+    coordinatesFromRoutePoints(route?.routePoints)
+  );
   console.log("🚀 ~ data:", data);
   return (
     <RouteDetailCard returnPath={`/locations/${locationId}`}>

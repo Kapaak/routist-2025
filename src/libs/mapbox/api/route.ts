@@ -1,16 +1,11 @@
-import { RoutePoint } from "@prisma/client";
-import { GetRoutePointsResponse } from "~/domains";
+import { Coordinate, GetRoutePointsResponse } from "~/domains";
 
 export async function getRoutePointsByWaypoints(
-  waypoints: RoutePoint[]
+  waypoints: Coordinate[]
 ): Promise<GetRoutePointsResponse> {
-  const coordinates = waypoints.map((point) => {
-    return [point.coordinates.lng, point.coordinates.lat];
-  });
-
-  const coordinatesString = coordinates.reduce((acc, coord, index) => {
+  const coordinatesString = waypoints.reduce((acc, coord, index) => {
     const coordString = `${coord[0]},${coord[1]}`;
-    if (index !== coordinates.length - 1) {
+    if (index !== waypoints.length - 1) {
       return acc + coordString + ";";
     } else {
       return acc + coordString;

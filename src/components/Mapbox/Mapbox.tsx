@@ -3,16 +3,18 @@
 import mapboxgl, { LngLatLike } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-import { useEffect, useRef } from "react";
-import { GeneratedRoute } from "~/domains";
+import { useCallback, useEffect, useRef } from "react";
+import { Coordinate, GeneratedRoute } from "~/domains";
+import { getRoutePointsByWaypoints } from "~/libs/mapbox/api/route";
 import {
-  initializeRouteMarkers,
-  initializeRoutePath,
-  initializeRoutePoints,
+  cleanupMapLayer,
+  updateRouteMarkers,
+  updateRoutePath,
+  updateRoutePoints,
 } from "~/utils/map";
 
 interface MapboxProps {
-  routePoints: LngLatLike[];
+  routePoints: Coordinate[];
   waypoints: GeneratedRoute["routePoints"];
 }
 
@@ -21,12 +23,34 @@ mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX;
 const DEFAULT_COORDINATES: LngLatLike = [16.6068, 49.1951];
 
 export function Mapbox({ waypoints, routePoints }: MapboxProps) {
+  const waypointsRef = useRef(waypoints);
   //Map container is for targeting the map HTML element
   const mapContainer = useRef(null);
   //MapInstance provides map methods and properties
   const mapInstance = useRef<mapboxgl.Map>(null);
 
+  const handleWaypointsChange = useCallback(
+    async (newWaypointsCoordinates: Coordinate[]) => {
+      if (!mapInstance.current) return;
+
+      const routePoints = await getRoutePointsByWaypoints(
+        newWaypointsCoordinates
+      );
+
+      cleanupMapLayer("route", mapInstance.current);
+      cleanupMapLayer("point", mapInstance.current);
+
+      updateRoutePoints(newWaypointsCoordinates, mapInstance.current);
+      const layer = updateRoutePath(routePoints.geometry.coordinates);
+
+      mapInstance.current?.addLayer(layer);
+    },
+    []
+  );
+
   useEffect(() => {
+    waypointsRef.current = waypoints;
+
     const routeStartCoordinates: LngLatLike = [
       waypoints[0]?.coordinates.lng,
       waypoints[0]?.coordinates.lat,
@@ -39,7 +63,7 @@ export function Mapbox({ waypoints, routePoints }: MapboxProps) {
       renderWorldCopies: false,
       preserveDrawingBuffer: true,
       style: "mapbox://styles/kapaakinos/cljg8ydp100aw01qs1bpl3sn2",
-      center: waypoints[0]?.coordinates
+      center: waypointsRef?.current?.[0]?.coordinates
         ? routeStartCoordinates
         : DEFAULT_COORDINATES,
       zoom: 9,
@@ -52,18 +76,18 @@ export function Mapbox({ waypoints, routePoints }: MapboxProps) {
       map.addControl(new mapboxgl.NavigationControl());
 
       if (waypoints && map) {
-        const waypointsCoordinates = waypoints?.map((point) => {
+        const waypointsCoordinates = waypointsRef?.current?.map((point) => {
           return [point.coordinates.lng, point.coordinates.lat];
         });
 
-        initializeRoutePoints(waypointsCoordinates, map);
-        initializeRouteMarkers(waypointsCoordinates, map);
+        updateRoutePoints(waypointsCoordinates, map);
+        updateRouteMarkers(waypointsCoordinates, map, handleWaypointsChange);
 
-        const layer = initializeRoutePath(routePoints);
+        const layer = updateRoutePath(routePoints);
         map?.addLayer(layer);
       }
     });
-  }, [routePoints, waypoints]);
+  }, [handleWaypointsChange, routePoints, waypoints]);
 
   return (
     <div id="map" className="relative w-full h-full">

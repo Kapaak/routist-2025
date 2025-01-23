@@ -1,4 +1,8 @@
-import { RoutesPerLocationResponse } from "~/domains";
+import {
+  Coordinate,
+  PrismaRoutePoint,
+  RoutesPerLocationResponse,
+} from "~/domains";
 
 export function countRegionOccurrences(data: RoutesPerLocationResponse[]): {
   [region: string]: number;
@@ -17,4 +21,12 @@ export function countRegionOccurrences(data: RoutesPerLocationResponse[]): {
   }
 
   return regionCounts;
+}
+
+export function coordinatesFromRoutePoints(
+  routePoints: PrismaRoutePoint[]
+): Coordinate[] {
+  return routePoints.map((point) => {
+    return [point.coordinates.lng, point.coordinates.lat];
+  });
 }

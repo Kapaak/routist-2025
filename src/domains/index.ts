@@ -1,6 +1,6 @@
 import { HTMLAttributes } from "react";
 
-import { Prisma, Route as PrismaRoute } from "@prisma/client";
+import { Prisma, Route as PrismaRoute, RoutePoint } from "@prisma/client";
 
 export type ClassName = HTMLAttributes<HTMLDivElement>["className"];
 
@@ -53,3 +53,7 @@ export type GetRoutePointsResponse = {
     weight_name: string;
   };
 };
+
+export type PrismaRoutePoint = RoutePoint;
+
+export type Coordinate = number[];

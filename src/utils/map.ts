@@ -1,8 +1,9 @@
 import { LayerSpecification, LngLatLike } from "mapbox-gl";
 import { Popup, Marker } from "mapbox-gl";
+import { Coordinate } from "~/domains";
 
 /**
- * Initializes route markers on the given map instance.
+ * Updates route markers on the given map instance.
  *
  * This function takes an array of coordinates and a Mapbox map instance,
  * and adds markers to the map at each coordinate. Each marker is draggable
@@ -12,16 +13,27 @@ import { Popup, Marker } from "mapbox-gl";
  * @param map - The Mapbox map instance where the markers will be added.
  * @returns An array of created markers.
  */
-export function initializeRouteMarkers(
-  coordinates: number[][],
-  map: mapboxgl.Map
+export function updateRouteMarkers(
+  coordinates: Coordinate[],
+  map: mapboxgl.Map,
+  onChange: (newCoordinates: Coordinate[]) => void
 ) {
-  const markers = coordinates.map((coord) => {
+  const markers = coordinates.map((coord, index) => {
     return new Marker()
       .setLngLat(coord as LngLatLike)
       .addTo(map)
       .setDraggable(true)
-      .on("drag", (e) => console.log(e, "drag event"))
+      .on("dragend", (e) => {
+        const lngLat = e.target.getLngLat();
+
+        const latLngCoordinates = lngLat.toArray() as Coordinate;
+
+        onChange(
+          coordinates.map((coord: Coordinate, i) =>
+            i === index ? latLngCoordinates : coord
+          )
+        );
+      })
       .setPopup(new Popup().setHTML("<h1>Marker</h1>"));
   });
 
@@ -29,7 +41,7 @@ export function initializeRouteMarkers(
 }
 
 /**
- * Initializes a route path layer for a Mapbox map.
+ * Updates a route path layer for a Mapbox map.
  *
  * This function takes an array of coordinates and generates a Mapbox layer
  * specification for displaying the route as a line on the map. The layer is
@@ -38,9 +50,7 @@ export function initializeRouteMarkers(
  * @param coordinates - An array of coordinates for the route path.
  * @returns A Mapbox LayerSpecification object for the route path.
  */
-export function initializeRoutePath(
-  coordinates: number[][] | LngLatLike[]
-): LayerSpecification {
+export function updateRoutePath(coordinates: Coordinate[]): LayerSpecification {
   const geojson = {
     type: "Feature",
     properties: {},
@@ -74,7 +84,7 @@ export function initializeRoutePath(
 }
 
 /**
- * Initializes route points on the given map instance.
+ * Updates route points on the given map instance.
  *
  * This function takes an array of coordinates and a Mapbox map instance,
  * and adds point layers to the map at each coordinate. Each point is displayed
@@ -84,10 +94,7 @@ export function initializeRoutePath(
  * @param map - The Mapbox map instance where the points will be added.
  * @returns void
  */
-export function initializeRoutePoints(
-  coordinates: number[][],
-  map: mapboxgl.Map
-) {
+export function updateRoutePoints(coordinates: number[][], map: mapboxgl.Map) {
   return coordinates.forEach((coord, index) => {
     map.addLayer({
       id: `point-${index}`,
@@ -113,5 +120,16 @@ export function initializeRoutePoints(
         "circle-color": "#3887be",
       },
     });
+  });
+}
+
+export function cleanupMapLayer(layerName: string, map: mapboxgl.Map) {
+  const layers = map?.getStyle()?.layers || [];
+
+  layers.forEach((layer) => {
+    if (layer.id.startsWith(layerName)) {
+      map.removeLayer(layer.id);
+      map.removeSource(layer.id);
+    }
   });
 }
