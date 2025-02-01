@@ -1,8 +1,15 @@
 import { Button } from "~/ui/components/atoms";
-import { RouteDetailTab, RouteEditCard, RouteEditTabs } from "./components";
+import {
+  RouteChangeTab,
+  RouteDetailTab,
+  RouteEditCard,
+  RouteEditTabs,
+} from "./components";
 import { getRouteById } from "~/libs/prisma/api/route";
 
 import { TabPanels } from "@headlessui/react";
+import { getRoutePointsByWaypoints } from "~/libs/mapbox/api/route";
+import { coordinatesFromRoutePoints } from "~/utils/route";
 
 interface RouteEditPageScreenProps {
   locationId: string;
@@ -18,6 +25,13 @@ export async function RouteEditPageScreen({
   if (!route) {
     return null;
   }
+
+  const data = await getRoutePointsByWaypoints(
+    //In the API I have routePoints, that are actually waypoints
+    //I need to convert them to coordinates
+    //TOOD: rename routePoints to waypoints
+    coordinatesFromRoutePoints(route?.routePoints)
+  );
 
   // const [page, setPage] = useState(RouteEditSteps.DETAIL);
 
@@ -76,7 +90,14 @@ export async function RouteEditPageScreen({
       <RouteEditTabs>
         <form id="FORM_ROUTE_EDIT" action="todo" className="w-full border-t-2">
           <TabPanels className="pt-4">
-            <RouteDetailTab route={route} />
+            <RouteDetailTab
+              route={route}
+              coordinates={data?.geometry?.coordinates}
+            />
+            <RouteChangeTab
+              route={route}
+              coordinates={data?.geometry?.coordinates}
+            />
           </TabPanels>
         </form>
       </RouteEditTabs>

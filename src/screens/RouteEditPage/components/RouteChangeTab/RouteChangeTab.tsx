@@ -1,24 +1,23 @@
-import { Mapbox } from "~/components/Mapbox";
-import { RouteDescription } from "../RouteDescription";
-import { Route } from "@prisma/client";
 import { TabPanel } from "@headlessui/react";
+import { Route } from "@prisma/client";
+import { Mapbox } from "~/components/Mapbox";
 import { Coordinate } from "~/domains";
+import { RouteWaypoints } from "../RouteWaypoints";
 
-interface RouteDetailTabProps {
+interface RouteChangeTabProps {
   route: Route;
   coordinates: Coordinate[];
 }
-export async function RouteDetailTab({
-  route,
-  coordinates,
-}: RouteDetailTabProps) {
+
+export function RouteChangeTab({ coordinates, route }: RouteChangeTabProps) {
   return (
     <TabPanel className="flex w-full h-full">
-      <RouteDescription detail={route?.detail} />
+      <RouteWaypoints waypoints={route.routePoints} />
       <Mapbox
         routePoints={coordinates}
         waypoints={route?.routePoints}
         className="flex-1 h-[50rem]"
+        editable
       />
     </TabPanel>
   );
