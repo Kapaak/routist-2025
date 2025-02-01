@@ -61,7 +61,6 @@ export async function RoutePageScreen({
         <Mapbox
           routePoints={data?.geometry?.coordinates}
           waypoints={route?.routePoints}
-          editable={false}
         />
       </div>
     </RouteDetailCard>

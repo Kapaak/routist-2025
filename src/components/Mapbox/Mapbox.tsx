@@ -4,6 +4,7 @@ import mapboxgl, { LngLatLike } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import { useCallback, useEffect, useRef } from "react";
+import { twMerge } from "tailwind-merge";
 import { Coordinate, GeneratedRoute } from "~/domains";
 import { getRoutePointsByWaypoints } from "~/libs/mapbox/api/route";
 import {
@@ -17,13 +18,19 @@ interface MapboxProps {
   routePoints: Coordinate[];
   waypoints: GeneratedRoute["routePoints"];
   editable?: boolean;
+  className?: string;
 }
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX;
 
 const DEFAULT_COORDINATES: LngLatLike = [16.6068, 49.1951];
 
-export function Mapbox({ waypoints, routePoints, editable }: MapboxProps) {
+export function Mapbox({
+  waypoints,
+  routePoints,
+  editable = false,
+  className,
+}: MapboxProps) {
   const waypointsRef = useRef(waypoints);
   //Map container is for targeting the map HTML element
   const mapContainer = useRef(null);
@@ -96,7 +103,7 @@ export function Mapbox({ waypoints, routePoints, editable }: MapboxProps) {
   }, [editable, handleWaypointsChange, routePoints, waypoints]);
 
   return (
-    <div id="map" className="relative w-full h-full">
+    <div id="map" className={twMerge("relative w-full h-full", className)}>
       <div ref={mapContainer} className="w-full h-full" />
     </div>
   );

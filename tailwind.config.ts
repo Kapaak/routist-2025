@@ -12,6 +12,16 @@ export default {
         "light-orange": "#FEF1D4",
         "main-red": "#D00404",
         "dark-blue": "#313873",
+        grey: {
+          100: "#fff",
+          200: "#F8F8F8",
+          400: "#EDEDED",
+          500: "#DADADA",
+          600: "#C2C2C2",
+          700: "#999999",
+          800: "#9A9A9A",
+          900: "#000000",
+        },
       },
       borderRadius: {
         small: ".4rem",

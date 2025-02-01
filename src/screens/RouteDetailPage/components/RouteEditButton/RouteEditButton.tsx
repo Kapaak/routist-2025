@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { redirectToLocation } from "~/actions";
 import { Button } from "~/ui/components/atoms";
 
@@ -9,12 +10,14 @@ interface EditButtonProps {
 
 export function EditButton({ redirectHref }: EditButtonProps) {
   return (
-    <Button
-      onClick={() => {
-        redirectToLocation(redirectHref);
-      }}
-    >
-      Upravit
-    </Button>
+    <Link href={redirectHref}>
+      <Button
+        onClick={() => {
+          redirectToLocation(redirectHref);
+        }}
+      >
+        Upravit
+      </Button>
+    </Link>
   );
 }

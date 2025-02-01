@@ -10,7 +10,7 @@ import { CircleNotch } from "@phosphor-icons/react/dist/ssr";
 
 const buttonVariant = cva(
   [
-    "flex items-center gap-2 rounded-small disabled:bg-slate-200 disabled:text-slate-400 disabled:border-slate-200",
+    "flex items-center gap-2 outline-none rounded-small disabled:bg-slate-200 disabled:text-slate-400 disabled:border-slate-200",
   ],
   {
     variants: {
@@ -27,7 +27,7 @@ const buttonVariant = cva(
         contained: "border",
         outlined: "border",
         tinted: "",
-        plain: "uppercase font-bold",
+        plain: "uppercase font-bold rounded-none",
       },
     },
     compoundVariants: [

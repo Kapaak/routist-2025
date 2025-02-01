@@ -30,3 +30,9 @@ export function coordinatesFromRoutePoints(
     return [point.coordinates.lng, point.coordinates.lat];
   });
 }
+
+export function metersToKilometers(meters: number) {
+  const km = meters / 1000;
+
+  return km.toFixed(1);
+}
