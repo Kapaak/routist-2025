@@ -1,8 +1,8 @@
-import { RoutePoint } from "@prisma/client";
+import { Coordinate } from "~/domains";
 import { Button, Input } from "~/ui/components/atoms";
 
 interface RouteWaypointsProps {
-  waypoints: RoutePoint[];
+  waypoints: Coordinate[];
 }
 
 export function RouteWaypoints({ waypoints }: RouteWaypointsProps) {
@@ -13,11 +13,13 @@ export function RouteWaypoints({ waypoints }: RouteWaypointsProps) {
       <div className="h-full overflow-y-auto">
         <div className="h-full">
           <div className="flex flex-col h-full flex-1  gap-4 p-12">
-            {waypoints?.map((field, index) => (
+            {waypoints?.map((waypoint, index) => (
               <Input
-                key={field.id}
+                key={index}
                 name={`routePoints.${index}.value`}
                 placeholder="Zadejte bod"
+                defaultValue={waypoint[0] + ", +  " + waypoint[1]}
+                value={waypoint[0] + ", +  " + waypoint[1]}
 
                 // {...events(index)}
                 // onCoordinatesChange={(val) =>

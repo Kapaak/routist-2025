@@ -18,7 +18,7 @@ import { Coordinate } from "~/domains";
 export function updateRouteMarkers(
   coordinates: Coordinate[],
   map: mapboxgl.Map,
-  onChange: (newCoordinates: Coordinate[]) => void,
+  onChange?: (coordinates: Coordinate[]) => void,
   editable = true
 ) {
   const markers = coordinates.map((coord, index) => {
@@ -31,11 +31,16 @@ export function updateRouteMarkers(
 
         const latLngCoordinates = lngLat.toArray() as Coordinate;
 
-        onChange(
-          coordinates.map((coord: Coordinate, i) =>
-            i === index ? latLngCoordinates : coord
-          )
+        const updatedCoordinates = coordinates.map((coord, i) =>
+          i === index ? latLngCoordinates : coord
         );
+
+        //TODO: Fix this hack
+        //Hack that updates the waypoints
+        //using it in the handleRoutePointsChange in useMapBox didnt work for some reason
+        coordinates = updatedCoordinates;
+
+        onChange?.(updatedCoordinates);
       })
       .setPopup(new Popup().setHTML("<h1>Marker</h1>"));
   });

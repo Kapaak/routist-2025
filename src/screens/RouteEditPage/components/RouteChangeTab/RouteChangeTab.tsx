@@ -1,23 +1,36 @@
+"use client";
+
 import { TabPanel } from "@headlessui/react";
 import { Route } from "@prisma/client";
 import { Mapbox } from "~/components/Mapbox";
-import { Coordinate } from "~/domains";
 import { RouteWaypoints } from "../RouteWaypoints";
+import { useCallback, useState } from "react";
+import { coordinatesFromRoutePoints } from "~/utils/route";
+import { Coordinate } from "~/domains";
 
 interface RouteChangeTabProps {
   route: Route;
-  coordinates: Coordinate[];
 }
 
-export function RouteChangeTab({ coordinates, route }: RouteChangeTabProps) {
+export function RouteChangeTab({ route }: RouteChangeTabProps) {
+  const [waypoints, setWaypoints] = useState(
+    coordinatesFromRoutePoints(route.routePoints)
+  );
+
+  const handleWaypointsChange = useCallback((waypoints: Coordinate[]) => {
+    console.log("UPDATED", waypoints);
+
+    setWaypoints(waypoints);
+  }, []);
+
   return (
     <TabPanel className="flex w-full h-full">
-      <RouteWaypoints waypoints={route.routePoints} />
+      <RouteWaypoints waypoints={waypoints} />
       <Mapbox
-        routePoints={coordinates}
-        waypoints={route?.routePoints}
+        waypoints={waypoints}
         className="flex-1 h-[50rem]"
         editable
+        onChange={handleWaypointsChange}
       />
     </TabPanel>
   );
